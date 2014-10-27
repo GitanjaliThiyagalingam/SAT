@@ -52,7 +52,7 @@ public class ExtractInfo {
 			System.out.println(functionSet);
 		}
 		
-		Set classSet = new HashSet<String>(classNames);
+		//Set classSet = new HashSet<String>(classNames);
 		//System.out.println(classSet);
 		
 	}
