@@ -42,10 +42,6 @@ public class ExtractInfo {
 		 */
 		String str = null;
 		for (int i = 0; i < 5/*requirementAretefactElements.size()*/; i++) {
-			/*str = requirementAretefactElements.get(i).getTitle();
-			getInfo(str);
-			str = requirementAretefactElements.get(i).getContent();
-			getInfo(str);*/
 			extactClass(requirementAretefactElements.get(i).getTitle(), requirementAretefactElements.get(i).getContent());
 		
 			Set classSet = new HashSet<String>(classNames);
@@ -56,10 +52,9 @@ public class ExtractInfo {
 			System.out.println(functionSet);
 		}
 		
-		Set classSet = new HashSet<String>(classNames);
-		//Set functionSet = new HashSet<String>(functionNames);
+		//Set classSet = new HashSet<String>(classNames);
 		//System.out.println(classSet);
-		//System.out.println(functionSet);
+		
 	}
 
 	public static void extactClass(String title, String content) {
@@ -76,7 +71,7 @@ public class ExtractInfo {
 
 			String[] splitSentence = content.split("such as");
 
-			// TODO : send the splitSentence[0] to get the nouns
+			// send the splitSentence[0] to get the nouns
 			classNames.addAll(ExtractInfo.getInfo(splitSentence[0]));
 
 			for (int i = 0; i < defaultWords.length; i++) {
