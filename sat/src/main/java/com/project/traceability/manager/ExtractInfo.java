@@ -42,10 +42,6 @@ public class ExtractInfo {
 		 */
 		String str = null;
 		for (int i = 0; i < 5/*requirementAretefactElements.size()*/; i++) {
-			/*str = requirementAretefactElements.get(i).getTitle();
-			getInfo(str);
-			str = requirementAretefactElements.get(i).getContent();
-			getInfo(str);*/
 			extactClass(requirementAretefactElements.get(i).getTitle(), requirementAretefactElements.get(i).getContent());
 		
 			Set classSet = new HashSet<String>(classNames);
