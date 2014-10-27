@@ -71,7 +71,7 @@ public class ExtractInfo {
 
 			String[] splitSentence = content.split("such as");
 
-			// TODO : send the splitSentence[0] to get the nouns
+			// send the splitSentence[0] to get the nouns
 			classNames.addAll(ExtractInfo.getInfo(splitSentence[0]));
 
 			for (int i = 0; i < defaultWords.length; i++) {
