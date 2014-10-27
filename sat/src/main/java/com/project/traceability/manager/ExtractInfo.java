@@ -53,9 +53,8 @@ public class ExtractInfo {
 		}
 		
 		Set classSet = new HashSet<String>(classNames);
-		//Set functionSet = new HashSet<String>(functionNames);
 		//System.out.println(classSet);
-		//System.out.println(functionSet);
+		
 	}
 
 	public static void extactClass(String title, String content) {
