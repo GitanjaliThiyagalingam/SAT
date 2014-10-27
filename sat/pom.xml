@@ -26,10 +26,5 @@
 			<artifactId>neo4j</artifactId>
 			<version>2.1.2</version>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.opennlp</groupId>
-			<artifactId>opennlp-tools</artifactId>
-			<version>1.5.3</version>
-		</dependency>
 	</dependencies>
 </project>

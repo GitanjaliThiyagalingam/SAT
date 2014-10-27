@@ -10,12 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import opennlp.tools.cmdline.parser.ParserTool;
-import opennlp.tools.parser.Parse;
-import opennlp.tools.parser.Parser;
-import opennlp.tools.parser.ParserFactory;
-import opennlp.tools.parser.ParserModel;
-import opennlp.tools.util.InvalidFormatException;
 
 import com.project.traceability.model.RequirementModel;
 import com.project.traceability.utils.Constants;
@@ -24,18 +18,18 @@ public class ExtractClass {
 	static Set<String> nounPhrases = new HashSet<>();
 	static Map<String, String> resultList = null;
 
-	public static Map<String, String> extractClass(
+	/*public static Map<String, String> extractClass(
 			List<RequirementModel> requirementModel) throws InvalidFormatException, IOException {
 		
 		getClassName("1", "print mini statement");
-		/*for (int i = 0; i < requirementModel.size(); i++) {
+		for (int i = 0; i < requirementModel.size(); i++) {
 			String requirementId = (requirementModel.get(i)).getRequirementId();
 			//String specificRequirement = (requirementModel.get(i)).getTitle();
 			getClassName(requirementId, "Customer details");
-		}*/
+		}
 		return resultList;
 
-	}
+	}*/
 
 	public static void getClassName(String requirementId, String requirement) {
 		//String[] requirementPart = requirement.split(" ");
@@ -49,13 +43,13 @@ public class ExtractClass {
 		}
 	}
 
-	public static void getNounPhrases(String requirementId, Parse p) {
+	/*public static void getNounPhrases(String requirementId, Parse p) {
 		System.out.println(p.toString());
 		if (p.getType().equals("VB") || p.getType().equals("VBD")
 				|| p.getType().equals("VBG") || p.getType().equals("VBN") || p.getType().equals("VBP")
 				|| p.getType().equals("VBZ")) {
-		/*if (p.getType().equals("NN") || p.getType().equals("NNS")
-				|| p.getType().equals("NNP") || p.getType().equals("NNPS") || p.getType().equals("NP")) {*/
+		if (p.getType().equals("NN") || p.getType().equals("NNS")
+				|| p.getType().equals("NNP") || p.getType().equals("NNPS") || p.getType().equals("NP")) {
 			nounPhrases.add(p.getCoveredText());
 		}
 
@@ -64,17 +58,17 @@ public class ExtractClass {
 		}
 
 	}
-
+*/
 	public static void parserAction(String requirementId, String partrequirement)
 			throws Exception {
-		InputStream is = new FileInputStream("./src/en-parser-chunking.zip");
+		/*InputStream is = new FileInputStream("./src/en-parser-chunking.zip");
 		ParserModel model = new ParserModel(is);
 		Parser parser = ParserFactory.create(model);
 		Parse topParses[] = ParserTool.parseLine(partrequirement, parser, 1);
 		for (Parse p : topParses) {
 			p.show();
 			getNounPhrases(requirementId, p);
-		}
+		}*/
 	}
 
 	public static void removeDefaultWord(String requirementId, Set<String> parse) {

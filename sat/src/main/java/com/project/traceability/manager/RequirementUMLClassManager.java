@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import opennlp.tools.util.InvalidFormatException;
 
 import com.project.traceability.model.ArtefactElement;
 import com.project.traceability.model.ArtefactSubElement;
@@ -30,15 +29,12 @@ public class RequirementUMLClassManager {
 		Map<String, ArtefactElement> UMLMap = UMLArtefactManager.UMLAretefactElements;
 		Iterator<Entry<String, ArtefactElement>> UMLIterator = UMLMap
 				.entrySet().iterator();
-		try {
-			Map<String, String> requirementsClass = ExtractClass.extractClass(RequirementsManger.requirementAretefactElements);
-		} catch (InvalidFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		/*try {
+			//Map<String, String> requirementsClass = ExtractClass.extractClass(RequirementsManger.requirementAretefactElements);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 		int count = 0;
 		/*while (UMLIterator.hasNext()) {
 			Map.Entry pairs = UMLIterator.next();
