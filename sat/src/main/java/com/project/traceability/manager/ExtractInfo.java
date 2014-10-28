@@ -4,7 +4,6 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import com.project.traceability.model.RequirementModel;
 
@@ -14,6 +13,7 @@ import edu.stanford.nlp.process.CoreLabelTokenFactory;
 import edu.stanford.nlp.process.PTBTokenizer;
 import edu.stanford.nlp.process.Tokenizer;
 import edu.stanford.nlp.process.TokenizerFactory;
+import edu.stanford.nlp.tagger.maxent.MaxentTagger;
 import edu.stanford.nlp.trees.Tree;
 
 public class ExtractInfo {
@@ -24,50 +24,52 @@ public class ExtractInfo {
 
 	private final static LexicalizedParser parser = LexicalizedParser
 			.loadModel(PCG_MODEL);
-	private static List<String> classNames = new ArrayList<String>();
-	private static List<String> functionNames = new ArrayList<String>();
+	private static List<String> classNames;
+	private static List<String> functionNames;
 
-	
 	private static List<String> attributeNames;
 	private static List<String> behaviourList = new ArrayList<String>();
 
 	public static void run(List<RequirementModel> requirementAretefactElements) {
 
-		/*
-		 * String a =
-		 * "The system shall allow customers to withdraw money from their account if the new balance is greater than or equal to the overdraft balance"
-		 * ; MaxentTagger tagge = new MaxentTagger(
-		 * "./src/english-left3words-distsim.tagger"); String tagged =
-		 * tagge.tagString(a); System.out.println(tagged);
-		 */
-		String str = null;
-		for (int i = 0; i < 5/*requirementAretefactElements.size()*/; i++) {
-			extactClass(requirementAretefactElements.get(i).getTitle(), requirementAretefactElements.get(i).getContent());
 		
-			Set classSet = new HashSet<String>(classNames);
-			System.out.println(classSet);
-			Set attributeSet = new HashSet<String>(attributeNames);
-			System.out.println(attributeSet);
-			Set functionSet = new HashSet<String>(functionNames);
-			System.out.println(functionSet);
+		 String a = "deposit money to current account"; 
+		 MaxentTagger tagge = new MaxentTagger("./src/english-bidirectional-distsim.tagger");
+		 String tagged =  tagge.tagString(a); 
+		 System.out.println(tagged);
+		 
+		for (int i = 0; i < requirementAretefactElements.size(); i++) {
+			extactClass(requirementAretefactElements.get(i).getTitle(),
+					requirementAretefactElements.get(i).getContent());
+
+			HashSet<String> classSet = new HashSet<String>(classNames);
+			System.out.println("Classes : " + classSet);
+			HashSet<String> attributeSet = new HashSet<String>(attributeNames);
+			System.out.println("Attributes : " + attributeSet);
+			HashSet<String> functionSet = new HashSet<String>(functionNames);
+			System.out.println("Behaviors : " + functionSet);
 		}
-		
-		//Set classSet = new HashSet<String>(classNames);
-		//System.out.println(classSet);
-		
+
+		// Set classSet = new HashSet<String>(classNames);
+		// System.out.println(classSet);
+
 	}
 
 	public static void extactClass(String title, String content) {
 		
+		
 		attributeNames = new ArrayList<String>();
+		classNames = new ArrayList<String>();
+		functionNames = new ArrayList<String>();
 
 		String[] defaultWords = { "database", "record", "system", "company",
 				"information", "organization", "detail" };
 
-		classNames = ExtractInfo.getInfo(title); // title
 		// case 1
 
 		if (content.contains("such as")) {
+
+			classNames = ExtractInfo.getInfo(title); // title
 
 			String[] splitSentence = content.split("such as");
 
@@ -80,25 +82,28 @@ public class ExtractInfo {
 					i--;
 				}
 			}
-			
+
 			// TODO : send the splitSentence[1] to get the nouns for select
 			// attribute
 			String[] attributeString = splitSentence[1].split(",");
-			for(int i = 0; i < attributeString.length; i++){
-				if(attributeString[i].contains("and")){
+			for (int i = 0; i < attributeString.length; i++) {
+				if (attributeString[i].contains("and")) {
 					String[] attr = attributeString[i].split("and");
-					for(int j = 0; j < attr.length; j++)
+					for (int j = 0; j < attr.length; j++)
 						attributeNames.add(attr[j].toLowerCase());
-				}
-				else 
+				} else
 					attributeNames.add(attributeString[i].toLowerCase());
 			}
+
 			generateBehavior(attributeNames);
 
+		} else {
+			System.out.println("do " + title.toLowerCase());
+			functionNames = getBehaviors("do " + title.toLowerCase());
 		}
 	}
 
-	public static void generateBehavior(List attList) {
+	public static void generateBehavior(List<String> attList) {
 		for (int i = 0; i < attList.size(); i++) {
 			behaviourList.add("get" + attList.get(i));
 			behaviourList.add("set" + attList.get(i));
@@ -122,8 +127,10 @@ public class ExtractInfo {
 			Tree parent = leaf.parent(tree);
 			if (i != 0)
 				preParent = preLeaf.parent(tree);
-			/*System.out.print(leaf.label().value() + "-"
-					+ parent.label().value() + " ");*/
+			/*
+			 * System.out.print(leaf.label().value() + "-" +
+			 * parent.label().value() + " ");
+			 */
 			if (parent.label().value().equals("IN")) {
 				leaves.remove(leaf);
 				i--;
@@ -144,13 +151,32 @@ public class ExtractInfo {
 					|| parent.label().value().equals("NNP")) {
 				classNames.add(leaf.label().value().toLowerCase());
 				// System.out.println("N*****" + leaf.label().value());
-			} /*else if (parent.label().value().equals("VB")) {
-				functionNames.add(leaf.label().value().toLowerCase());
-				// System.out.println("N*****" + leaf.label().value());
-			}*/
+			}
 		}
 
 		return (ArrayList<String>) classNames;
+	}
+
+	public static ArrayList<String> getBehaviors(String str) {
+		
+		functionNames = new ArrayList<String>();
+		Tree tree = parser.parse(str);
+
+		List<Tree> leaves = tree.getLeaves();
+		// Print words and Pos Tags
+		for (int i = 0; i < leaves.size(); i++) {
+			Tree leaf = leaves.get(i);			
+			Tree parent = leaf.parent(tree);
+			System.out.println(parent.label().value() + leaf.label().value());
+			if (parent.label().value().equals("VB") ){
+				System.out.println(leaf.label().value());
+				if(!leaf.label().value().equals("do")) {
+			
+				functionNames.add(leaf.label().value().toLowerCase());
+				System.out.println(leaf.label().value());
+			}}
+		}
+		return (ArrayList<String>) functionNames;
 	}
 
 	public Tree parse(String str) {
