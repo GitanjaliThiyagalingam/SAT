@@ -1,4 +1,4 @@
-package org.apache.maven.archetypes.maven_archrtype_quickstart;
+package com.project.traceability.manager;
 
 import java.util.ArrayList;
 import java.util.List;
